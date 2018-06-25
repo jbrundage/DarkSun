@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+}
+
+#topnav {
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ecf0f1;
+  font-family: "Arial";
+  font-size: 32px;
+}
+
+#topnav h1, #topnav div, #topnav button {
+  float: left;
+}
+
+#topnav h1 {
+  margin: 1px 0 0 8px;
+  font-size: 32px;
+}
+
+#topnav .spacer {
+  margin: 8px 16px 8px 20px;
+  width: 1px;
+  height: 24px;
+  background-color: #ecf0f1;
+}
+
+#topnav button {
+  padding: 0 8px;
+  margin: 4px 0 0 4px;
+  height: 32px;
+  line-height: 16px;
+}
+
+#game {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.overlay {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 16px;
+  border-radius: .25rem;
+  top: -1000px;
+  -webkit-transition: top 0.2s;
+  /* Safari */
+  transition: top 0.2s;
+}
+
+.overlay hr {
+  border-color: #ecf0f1;
+  opacity: 0.5;
+}
+
+.overlay span {
+  color: #ecf0f1;
+}
+
+.overlay input {
+  width: 100%;
+}
+
+.overlay #forgot_password {
+  opacity: 0.5;
+}
+/*# sourceMappingURL=index.css.map */

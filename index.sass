@@ -1,0 +1,57 @@
+$bg_color1: rgba(0, 0, 0, 0.5)
+$bg_color2: rgba(0, 0, 0, 0.5)
+$bg_color3: rgba(0, 0, 0, 0.8)
+$font_color1: #ecf0f1
+$font_color2: #2c3e50
+$font_family1: "Arial"
+$p: 4px
+$font_size1: $p * 8
+$btn_h: $p * 8
+$topnav_h: $btn_h + ($p * 2)
+body
+    margin: 0
+#topnav
+    height: $topnav_h
+    background-color: $bg_color3
+    color: $font_color1
+    font-family: $font_family1
+    font-size: $font_size1
+    h1, div, button
+        float: left
+    h1
+        margin: $p/4 0 0 $p*2
+        font-size: $font_size1
+    .spacer
+        margin: $p*2 $p*4 $p*2 $p*5
+        width: 1px
+        height: $btn_h - ($p*2)
+        background-color: $font_color1
+    button
+        padding: 0 $p*2
+        margin: $p 0 0 $p
+        height: $btn_h
+        line-height: $btn_h/2
+#game
+    background-color: $bg_color1
+    position: fixed
+    top: $topnav_h
+    left: 0
+    right: 0
+    bottom: 0
+.overlay
+    position: fixed
+    background-color: $bg_color3
+    padding: $p*4
+    border-radius: .25rem
+    top: -1000px
+    -webkit-transition: top 0.2s; /* Safari */
+    transition: top 0.2s;
+    hr
+        border-color: $font_color1
+        opacity: 0.5
+    span
+        color: $font_color1
+    input
+        width: 100%
+    #forgot_password
+        opacity: 0.5
