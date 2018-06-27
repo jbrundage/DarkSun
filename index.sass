@@ -6,10 +6,29 @@ $font_color2: #2c3e50
 $font_family1: "Arial"
 $p: 4px
 $font_size1: $p * 8
-$btn_h: $p * 8
-$topnav_h: $btn_h + ($p * 2)
+$font_size2: $p * 5
+$input_h: $p * 8
+$btn_h: $input_h
+$topnav_h: ($btn_h * 2) + ($p * 3)
 body
     margin: 0
+    background: url(media/space-background.jpg)
+h1
+    margin: $p/4 0 0 $p*2
+    font-size: $font_size1
+h2
+    font-size: $font_size2
+    color: $font_color1
+input
+    height: $input_h
+    padding: $p $p*2
+button
+    padding: 0 $p*2
+    height: $btn_h
+    line-height: 1!important
+    font-size: $font_size2
+th
+    padding: $p*2 $p*3
 #topnav
     height: $topnav_h
     background-color: $bg_color3
@@ -18,9 +37,6 @@ body
     font-size: $font_size1
     h1, div, button
         float: left
-    h1
-        margin: $p/4 0 0 $p*2
-        font-size: $font_size1
     .spacer
         margin: $p*2 $p*4 $p*2 $p*5
         width: 1px
@@ -43,9 +59,13 @@ body
     background-color: $bg_color3
     padding: $p*4
     border-radius: .25rem
-    top: -1000px
-    -webkit-transition: top 0.2s; /* Safari */
-    transition: top 0.2s;
+    #new_btn
+        position: absolute
+        top: $p*4
+        right: $p*4
+    table
+        width: 100%
+        color: $font_color1
     hr
         border-color: $font_color1
         opacity: 0.5

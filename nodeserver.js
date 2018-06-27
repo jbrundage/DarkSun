@@ -22,6 +22,22 @@ app.get('/', welcomepage);
 app.post('/register', urlencodedparser, registerpage);
 app.get('/listusers', displayusers);
 
+Object.keys(schemas.json).forEach((collection_name)=>{
+    app.get('/view_'+collection_name,function(request, response){
+        schemas[collection_name].find()
+        .then(function(founditems) {
+            response.send(founditems);
+        }).catch(console.error);
+    });
+    app.post('/add_'+collection_name,urlencodedparser,function(request, response){
+        let inp_obj = {};
+        Object.keys(request.body).forEach(function(param_name){
+            inp_obj[param_name] = request.body[param_name];
+        })
+        new schemas[collection_name](inp_obj).save();
+    });
+})
+
 function displayusers(request, response) {
     schemas.registeredUserModel.find()
         .then(function(founditems) {
@@ -47,6 +63,15 @@ function registerpage(request, response) {
 }
 
 function welcomepage(request, response) {
+    let _json = {};
+    Object.keys(schemas.json).forEach(function(name,i){
+        _json[name] = {};
+        Object.keys(schemas.json[name]).forEach(function(paramName,i2){
+            _json[name][paramName] = JSON.parse(JSON.stringify(schemas.json[name][paramName]));
+            _json[name][paramName].type = schemas.json[name][paramName].type === String ? "string" : "";
+            _json[name][paramName].type = schemas.json[name][paramName].type === Number ? "number" : _json[name][paramName].type;
+        });
+    });
   response.send(`
     <html>
         <head>
@@ -60,16 +85,12 @@ function welcomepage(request, response) {
             <script src="http://localhost:8080/index.js"></script>
 
             <script>
-                window.mongo_json_str = '${JSON.stringify(schemas.json)}';
+                window.mongo_json_str = '${JSON.stringify(_json)}';
                 window.mongo_json = {};
-                try{
-                    mongo_json = JSON.parse(schemas.json);
-                }catch(e){
-                    console.error(e);
-                }
-                $(()=>{
-                    show_shell("logged_out");
-                    show_shell("login");
+                try{mongo_json = JSON.parse(mongo_json_str)}catch(e){console.error(e)}
+
+                $(function(){
+                    show_collection("${Object.keys(schemas.json)[0]}");
                 })
             </script>
         </head>
@@ -77,9 +98,9 @@ function welcomepage(request, response) {
             <div id="topnav">
                 <h1>DARK SUN</h1>
                 <div class="spacer"></div>
-                <button type="button" id="login" class="btn btn-secondary" onclick="show_shell('login')">login</button>
-                <button type="button" id="new_user" class="btn btn-secondary" onclick="show_shell('new_user')">new_user</button>
-                <button type="button" id="edit_user" class="btn btn-secondary" onclick="show_shell('edit_user')">edit_user</button>
+                ${Object.keys(schemas.json).map((n,i)=>{
+                    return `<button type="button" id="${n}_btn" class="btn btn-secondary" onclick="show_collection('${n}')">${n}</button>`
+                }).join('')}
             </div>
             <div id="game"></div>
         </body>

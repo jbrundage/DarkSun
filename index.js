@@ -1,99 +1,93 @@
-function show_shell(page_id) {
-    switch(page_id) {
-        case "login":
-        case "new_user":
-        case "edit_user":
-        case "info_screens":
-            show_shell_as_overlay(page_id);
-            break;
-        case "logged_out":
-        case "game_grid_2d":
-        case "game_grid_3d":
-            show_shell_as_background(page_id);
-            break;
-    }
+function show_collection(collection_name){
 
-    function show_shell_as_background(page_id){
-        $("#game").html("");
-        $("body").css({background: ""});
-        switch(page_id) {
-            case "logged_out":
-                $("body").css({
-                    background: `url(media/space-background.jpg)`
-                })
-                break;
-            case "game_grid_2d":
-            case "game_grid_3d":
-                break;
-        }
-    }
-    function show_shell_as_overlay(page_id){
-        let w, h, $overlay;
-        $(".overlay").remove();
-        switch(page_id) {
-            case "login":
-                w = 300;
-                h = 280;
-                $overlay = $(`
-                    <div class="overlay" style="width:${w}px;height:${h}px;">
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="email" placeholder="Email or Username">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <button type="button" class="btn btn-dark" onclick="submit_overlay_form('login')" style="width: 62%;margin-left: 18%">Submit</button>
-                        <button type="button" class="btn btn-link" onclick="click_forgot_password()" style="width: 62%;margin-left: 18%" id="forgot_password">Forgot Password?</button>
-                        <br/>
-                        <br/>
-                        <button type="button" class="btn btn-primary" onclick="show_shell('new_user')" style="width: 100%;">SIGN UP - its free!</button>
-                    </div>
-                `)
-                break;
-            case "new_user":
-                w = 300;
-                h = 283;
-                $overlay = $(`
-                    <div class="overlay" style="width:${w}px;height:${h}px;">
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="email" placeholder="Email or Username">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
-                        </div>
-                        <button type="button" class="btn btn-dark" onclick="submit_overlay_form('new_user')" style="width: 62%;margin-left: 18%">SIGN UP</button>
-                        <br/>
-                        <br/>
-                        <span>Already have an account?</span><button type="button" class="btn btn-link" onclick="show_shell('login')">Sign In</button>
-                    </div>
-                `)
-                break;
-            case "edit_user":
-                w = 300;
-                h = 300;
-                $overlay = $(`
-                    <div class="overlay" style="width:${w}px;height:${h}px;">
-                        <input id="username" type="text" placeholder="email or username"></input>
-                        <input id="email" type="text" placeholder="email or username"></input>
-                        <input id="password" type="text" placeholder="password"></input>
-                        <input id="password_conf" type="text" placeholder="confirm password"></input>
-                        <button id="create_user" class="btn btn-primary" onclick="click_create_user()">create_user</button>
-                        <hr/>
-                        <button id="signin" class="btn btn-primary" onclick="click_signin()">signin</button>
-                        <button id="signup" class="btn btn-primary" onclick="click_signup()">signup</button>
-                    </div>
-                `)
-                break;
-        }
+    $(".overlay").remove();
+    view_collection(collection_name, function(json_arr){
+        const $overlay = $('<div class="overlay" style="height:80%;width:80%;display:none;"></div>');
+        $overlay.html(`
+            <h2>Viewing all <b>${collection_name}</b> documents</h2>
+            <table>
+                <thead>${th_cols()}</thead>
+                <tbody>${tr_rows()}</tbody>
+            </table>
+        `)
         $("body").append($overlay);
-        setTimeout(function(){
-            $overlay.css({
-                "top": (window.innerHeight/2) - h/2 + "px",
-                "left": (window.innerWidth/2) - w/2 + "px"
-            })
-        },200);
-    }
+        $overlay.fadeIn();
+        $overlay.css({
+            "top": (window.innerHeight/2) - ($overlay.height()/2) + "px",
+            "left": (window.innerWidth/2) - ($overlay.width()/2) + "px"
+        });
+        function th_cols(){
+            return `
+                ${Object.keys(mongo_json[collection_name]).map(n=>{
+                    return `<th>${n}</th>`
+                }).join('')}
+                <th>...</th>
+            `;
+        }
+        function tr_rows(){
+            return `${json_arr.map(document_obj=>{
+                const _id = document_obj._id;
+                return `
+                <tr>
+                    ${Object.keys(mongo_json[collection_name]).map(n=>{
+                        return `<td>
+                        ${typeof document_obj[n] !== "undefined" ? document_obj[n] : ""}
+                                </td>`
+                    }).join('')}
+                    <td>
+                        <button class="btn btn-danger" onclick="remove_document('${_id}', '${collection_name}')">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            })}
+            <tr>
+                ${Object.keys(mongo_json[collection_name]).map(n=>{
+                    return `<td><input type="text" name="${n}" placeholder="${n}"/></td>`
+                }).join('')}
+                <td>
+                    <button class="btn btn-success" onclick="add_document(this, '${collection_name}')">
+                        <i class="fa fa-save"></i>
+                    </button>
+                </td>
+            </tr>`;
+        }
+    })
+}
+function remove_document(btn_element, collection_name){
+    $.ajax({
+        url: "/add_"+collection_name,
+        type: "post",
+        data: $(btn_element).closest('tr').find('input').serialize(),
+        success: function(resp){
+            console.log('add_document success callback');
+            console.log('resp',resp);
+        }
+    })
+}
+function add_document(btn_element, collection_name){
+    $.ajax({
+        url: "/add_"+collection_name,
+        type: "post",
+        data: $(btn_element).closest('tr').find('input').serialize(),
+        success: function(resp){
+            console.log('add_document success callback');
+            console.log('resp',resp);
+        }
+    })
+}
+function view_collection(collection_name, callback){
+    $.ajax({
+        url: `/view_${collection_name}`,
+        type: "get",
+        data: {},
+        success: function(resp){
+            console.log('add_document success callback');
+            console.log('resp',resp);
+            if(callback)callback(resp);
+        },
+        error: function(resp){
+            console.error(resp);
+        }
+    })
 }
