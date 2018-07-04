@@ -1,0 +1,10 @@
+{
+    "name": "dark_sun",
+    "version": "0.0.1",
+    "dependencies": {
+        "mongoose": "5.1.7",
+        "body-parser": "1.18.3",
+        "express": "4.16.3",
+        "crypto": "1.0.1"
+    }
+}
