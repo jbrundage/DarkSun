@@ -1,2 +1,49 @@
+$p: 5px
+$bg_color: rgba(0, 0, 0, 0.8);
 body
-    background: url(/game/background.jpg);
+    background: url(/game_client/background.jpg)
+    background-size: 100% 100%
+.modal
+    display: block
+    position: fixed
+    background-color: $bg_color
+    border-radius: $p
+    padding: $p
+    input
+        padding: $p
+        width: 100%
+        margin-bottom: $p
+        border-radius: $p
+    button
+        margin-left: $p
+        padding: $p
+        font-size: $p * 4
+        float: right
+.modal-a-a
+    width: 62%
+    height: 62%
+    top: 19%
+    left: 19%
+.modal-a-b
+    width: 62%
+    height: 38%
+    top: 19%
+    left: 31%
+.modal-b-a
+    width: 38%
+    height: 62%
+    top: 31%
+    left: 19%
+.modal-b-b
+    width: 38%
+    height: 38%
+    top: 19%
+    left: 19%
+.top-right-buttons
+    position: fixed
+    height: ($p * 5)
+    width: ($p * 30)
+    background-color: $bg_color;
+    button
+        float: left
+        

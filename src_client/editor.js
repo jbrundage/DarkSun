@@ -130,6 +130,27 @@ function save_form(elm){
         },
     })
 }
+function save_form2(elm){
+    let form = $(elm).closest('form');
+    let points_obj_arr = [];
+    $('form.point').each(function(){
+        points_obj_arr.push($(this).serialize());
+    })
+    $.ajax({
+        url: form_action,
+        type: "post",
+        data: {
+            serial: _serialized_data,
+            points: JSON.stringify(points_obj_arr)
+        },
+        success: function(resp){
+            console.log(resp);
+        },
+        error: function(resp){
+            console.error(resp);
+        },
+    })
+}
 function loadshipmodel() {
     //console.log("Ready to load "+ $("#ship_model").val());
     var result = loader.load($("#ship_model").val(), (geometry, materials) => {

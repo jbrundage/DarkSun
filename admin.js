@@ -1,90 +1,100 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const mongo = require('mongoose');
-const schemas = require('./db.js');
+
+const auth_db = require('./src_server/auth_db');
+const game_db = require('./game_server/db');
+const auth_helper = require('./src_server/auth_helper');
+
+const dev_tools = require('./src_server/tools');
+const game_config = require('./game_server/config');
 
 let app = express();
 app.listen(80);
 app.get('/', landing_page);
-app.use('/img', express.static('img'));
-app.use('/src', express.static('src'));
+app.use('/src_client', express.static('src_client')); /* for abstract css/js/img */
+app.use('/game_client', express.static('game_client')); /* for game-specific css/js/img */
 
 let urlencodedparser = bodyparser.urlencoded({extended:false});
-mongo.connect('mongodb://localhost/myfirst', function(){}).then(() => {})
+mongo.connect(`mongodb://localhost/${game_config.db}`, function(){}).then(() => {})
     .catch(err => {
-        console.error('App starting error:', err.stack);
+        console.error(err.stack);
         process.exit(1);
     });
 mongo.Promise = global.Promise;
 
-Object.keys(schemas.json).forEach((collection_name)=>{
-    app.get('/view_'+collection_name,function(request, response){
-        if(request.body["_id"]){
-            schemas[collection_name].find({ _id: request.body["_id"] })
-            .then(function(founditems) {
-                response.send(founditems);
-            }).catch(console.error);
+app.post('/start_game',urlencodedparser,function(request, response){
+    auth_helper.check_session_state(request.body.session_key,function(user_session_doc){
+        console.log("session_key is valid:");
+        console.info(`user_session_doc`,user_session_doc);
+    });
+});
+app.post('/view_users',urlencodedparser,function(request, response){
+    auth_db.users.find()
+    .then((resp) => {response.send(resp);})
+    .catch((resp) => {response.send(resp);});
+});
+app.post('/view_sessions',urlencodedparser,function(request, response){
+    auth_db.sessions.find()
+    .then((resp) => {response.send(resp);})
+    .catch((resp) => {response.send(resp);});
+});
+app.post('/create_user',urlencodedparser,function(request, response){
+    console.info(`request.body`,request.body);
+    let obj = JSON.parse(JSON.stringify(request.body));
+    new auth_db.users(obj).save()
+    .then((resp) => {response.send(resp);})
+    .catch((resp) => {response.send(resp);});
+});
+app.post('/submit_login',urlencodedparser,function(request, response){
+    auth_db.users.find({
+        username: request.body.username,
+        password: request.body.password
+    })
+    .then((resp) => {
+        if(resp.length === 1){
+            const session_key = auth_helper.generate_key();
+            const session_doc = {
+                username: request.body.username,
+                key: session_key,
+                json: `{}`
+            };
+            console.info(`auth_db.sessions`,auth_db.sessions);
+            new auth_db.sessions(session_doc).save().then(console.log).catch(e=>console.log(e))
+            response.send(session_doc);
+        } else {
+            response.send("bad login");
         }
-    });
-    app.get('/all_'+collection_name,function(request, response){
-        schemas[collection_name].find()
-        .then(response.send)
-        .catch(console.error);
-    });
-    app.post('/update_'+collection_name,urlencodedparser,function(request, response){
-        if(request.body["_id"]){
-            schemas[collection_name].update({ _id: request.body["_id"] }, request.body, options, callback)
-            .catch(console.error);
-        }
-    });
-    app.post('/remove_'+collection_name,urlencodedparser,function(request, response){
-        if(request.body["_id"]){
-            schemas[collection_name].find({ _id: request.body["_id"] }).remove()
-            .catch(console.error);
-        }
-    });
-    app.post('/add_'+collection_name,urlencodedparser,function(request, response){
-        let inp_obj = {};
-        Object.keys(request.body).forEach(function(param_name){
-            inp_obj[param_name] = request.body[param_name];
-        })
-        new schemas[collection_name](inp_obj).save();
-    });
-})
-
+    })
+    .catch((resp) => {response.send(resp);});
+});
+let api_test_arr = [
+    ['/view_users', ''],
+    ['/view_sessions', ''],
+    ['/start_game', 'foobar=1'],
+    ['/create_user', 'username=test123&password=test456'],
+    ['/submit_login', 'username=test123&password=test456'],
+    ['/submit_login', 'username=test123&password=the_wrong_password'],
+    ['/update_user', '_id=asdf'],
+];
 function landing_page(request, response) {
-  response.send(`
-    <html>
-        <head>
-            <title>Dark Sun</title>
-            
-            <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
-            <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'></link>
-            <link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'></link>
-            <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js'></script>
-            <link rel="stylesheet" href="src/style_abstract.css"></link>
-            <script src="src/gui_abstract.js"></script>
-
-            <script>
-                window.mongo_json_str = '${JSON.stringify(schemas.json)}';
-                window.mongo_json = {};
-                try{mongo_json = JSON.parse(mongo_json_str)}catch(e){console.error(e)}
-
-                $(function(){
-                    show_collection("${Object.keys(schemas.json)[0]}");
-                })
-            </script>
-        </head>
-        <body>
-            <div id="topnav">
-                <h1>DARK SUN</h1>
-                <div class="spacer"></div>
-                ${Object.keys(schemas.json).map((n,i)=>{
-                    return `<button type="button" id="${n}_btn" class="btn btn-secondary" onclick="show_collection('${n}')">${n}</button>`
-                }).join('')}
-            </div>
-            <div id="game"></div>
-        </body>
-    </html>
-`);
+    console.info(`request`,request);
+    response.send(`
+        <html>
+            <head>
+                <title>${game_config.name}</title>
+                <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+                <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'></link>
+                <link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'></link>
+                <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js'></script>
+                <link rel="stylesheet" type="text/css" href="src_client/style.css"></link>
+                <script src="src_client/main.js"></script>
+                <script src="src_client/gui.js"></script>
+                <script src="src_client/tools.js"></script>
+            </head>
+            <body>
+                <div id="game">${dev_tools.api_test_form(api_test_arr)}</div>
+            </body>
+        </html>
+    `);
 }

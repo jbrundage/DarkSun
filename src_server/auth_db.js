@@ -11,9 +11,10 @@ const temp = {
         session:    {type: String},
     },
     sessions: {
-        key:        {type: String, required:true},
-        json:       {type: String, required:true},
-        created:    {type: Date} 
+        key:        {type: String, required:true, unique: true},
+        username:   {type: String},
+        json:       {type: String},
+        created:    {type: Date,   default: Date.now} 
     }
 };
 let ret = {}; 
@@ -28,6 +29,6 @@ Object.keys(temp).forEach(function(name,i){ /* create json db schema for client-
     });
 });
 ret.users = mongo.model('users', new mongo.Schema(temp.users));
-ret.sessions = mongo.model('sessions', new mongo.Schema(temp.users));
+ret.sessions = mongo.model('sessions', new mongo.Schema(temp.sessions));
 
 module.exports = ret;

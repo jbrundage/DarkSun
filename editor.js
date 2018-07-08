@@ -2,10 +2,11 @@ const express = require('express');
 const bodyparser = require('body-parser');  // helps us receive POST data from page requests
 const mongo = require('mongoose');  // enables access to the database
 const schemas = require('./game_server/db.js');
+const game_config = require('./game_server/config');
 
 let app = express();
 let urlencodedparser = bodyparser.urlencoded({extended:false});
-mongo.connect('mongodb://localhost/myfirst', function() { })
+mongo.connect(`mongodb://localhost/${game_config.db}`, function() { })
     .then(() => {
     })
     .catch(err => {
@@ -14,7 +15,7 @@ mongo.connect('mongodb://localhost/myfirst', function() { })
     });
 mongo.Promise = global.Promise;
 
-let server = app.listen(80);
+let server = app.listen(81);
 app.use('/src_client', express.static('src_client'));
 app.use('/game_client', express.static('game_client'));
 app.get('/', page_editor);
