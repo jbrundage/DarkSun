@@ -10,7 +10,9 @@ const temp = {
         name:        {type: String, require: true, unique: true},
         model:       {type: String, require: true}, /* file path to the 3D model to be displayed */
         texture:     {type: String, require: true}, /* file path to the texture to be applied to to the 3D model */
-        weightlimit: {type: Number, require: true, min: 100} /* how much weight this ship can handle, in total. Mostly decided by the part ports */
+        health:      {type: Number, require: true, min: 100}, /* how much damage the core of the ship can take before being destroyed */
+        weightlimit: {type: Number, require: true, min: 100}, /* how much weight this ship can handle, in total. Mostly decided by the part ports */
+        powerlimit:  {type: Number, require: true, min: 100} /* how much power can pass through the core of the ship */ 
     },
     portLocation: { /* all locations where other parts can be attached */
         targetType: {type: Number, require: true}, /* 0 for belonging to a ship, 1 for belonging to a part */
@@ -38,9 +40,10 @@ const temp = {
         model:        {type: String, require: true}, /* file path to the 3D model to be displayed */
         texture:      {type: String, require: true}, /* file path to the texture applied to the 3D model */
         componentMap: {type: String, require: true}, /* file path to the image showing where components can be placed into this part */
+        health:       {type: Number, require: true}, /* base health this part has */
         baseweight:   {type: Number, require: true, min: 20}, /* How much this part weighs, before adding any components */
         weightlimit:  {type: Number, require: true, min: 100}, /* how much weight this part can hold on all its ports */
-        health:       {type: Number, require: true} /* base health this part has */
+        powerlimit:   {type: Number, require: true} /* How much power can pass through this part */
     },
     componentLocation: { /* where components can be placed on a given part (relative to the component map image).
             Related only to the part kind. Components must reference this to determine where they can fit */
