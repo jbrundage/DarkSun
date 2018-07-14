@@ -10,7 +10,7 @@ const dev_tools = require('./src_server/tools');
 const game_config = require('./game_server/config');
 
 let app = express();
-app.listen(80);
+app.listen(82);
 app.get('/', landing_page);
 app.use('/src_client', express.static('src_client')); /* for abstract css/js/img */
 app.use('/game_client', express.static('game_client')); /* for game-specific css/js/img */
@@ -24,9 +24,10 @@ mongo.connect(`mongodb://localhost/${game_config.db}`, function(){}).then(() => 
 mongo.Promise = global.Promise;
 
 app.post('/start_game',urlencodedparser,function(request, response){
-    auth_helper.check_session_state(request.body.session_key,function(user_session_doc){
+    auth_helper.session_handshake(request.body.session_key,function(user_session_doc){
         console.log("session_key is valid:");
         console.info(`user_session_doc`,user_session_doc);
+        response.send(user_session_doc);
     });
 });
 app.post('/view_users',urlencodedparser,function(request, response){

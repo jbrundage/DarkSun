@@ -3,6 +3,18 @@ body {
   background-size: 100% 100%;
 }
 
+body canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  color: white;
+}
+
 .modal {
   display: block;
   position: fixed;
@@ -25,32 +37,108 @@ body {
   float: right;
 }
 
-.modal-a-a {
+.width-a1 {
   width: 62%;
-  height: 62%;
-  top: 19%;
   left: 19%;
 }
 
-.modal-a-b {
-  width: 62%;
-  height: 38%;
-  top: 19%;
+.width-a2 {
+  width: 31%;
+  left: 34.5%;
+}
+
+.width-a3 {
+  width: 20.66667%;
+  left: 39.66667%;
+}
+
+.width-a4 {
+  width: 15.5%;
+  left: 42.25%;
+}
+
+.width-a5 {
+  width: 12.4%;
+  left: 43.8%;
+}
+
+.width-b1 {
+  width: 38%;
   left: 31%;
 }
 
-.modal-b-a {
-  width: 38%;
-  height: 62%;
-  top: 31%;
-  left: 19%;
+.width-b2 {
+  width: 19%;
+  left: 40.5%;
 }
 
-.modal-b-b {
-  width: 38%;
-  height: 38%;
+.width-b3 {
+  width: 12.66667%;
+  left: 43.66667%;
+}
+
+.width-b4 {
+  width: 9.5%;
+  left: 45.25%;
+}
+
+.width-b5 {
+  width: 7.6%;
+  left: 46.2%;
+}
+
+.height-a1 {
+  height: 62%;
   top: 19%;
-  left: 19%;
+}
+
+.height-a2 {
+  height: 31%;
+  top: 34.5%;
+}
+
+.height-a3 {
+  height: 20.66667%;
+  top: 39.66667%;
+}
+
+.height-a4 {
+  height: 15.5%;
+  top: 42.25%;
+}
+
+.height-a5 {
+  height: 12.4%;
+  top: 43.8%;
+}
+
+.height-b1 {
+  height: 38%;
+  top: 31%;
+}
+
+.height-b2 {
+  height: 19%;
+  top: 40.5%;
+}
+
+.height-b3 {
+  height: 12.66667%;
+  top: 43.66667%;
+}
+
+.height-b4 {
+  height: 9.5%;
+  top: 45.25%;
+}
+
+.height-b5 {
+  height: 7.6%;
+  top: 46.2%;
+}
+
+.margin-0 {
+  margin: 0 !important;
 }
 
 .top-right-buttons {
@@ -62,5 +150,43 @@ body {
 
 .top-right-buttons button {
   float: left;
+}
+
+#game_save_thumb_wrapper {
+  float: left;
+  overflow-x: scroll;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.game_save_thumb {
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 15px;
+  padding: 5px;
+  background-color: rgba(88, 88, 88, 0.8);
+}
+
+.game_save_thumb button {
+  width: 100%;
+  margin-top: 31%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(88, 88, 88, 0.8);
+  border-radius: 5px;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */

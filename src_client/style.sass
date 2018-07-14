@@ -1,8 +1,40 @@
+$a1: percentage(((62/100) / 1))
+$a2: percentage(((62/100) / 2))
+$a3: percentage(((62/100) / 3))
+$a4: percentage(((62/100) / 4))
+$a5: percentage(((62/100) / 5))
+$half_a1: percentage((50/100) - ((62/100) / 1 / 2))
+$half_a2: percentage((50/100) - ((62/100) / 2 / 2))
+$half_a3: percentage((50/100) - ((62/100) / 3 / 2))
+$half_a4: percentage((50/100) - ((62/100) / 4 / 2))
+$half_a5: percentage((50/100) - ((62/100) / 5 / 2))
+$b1: percentage(((38/100) / 1))
+$b2: percentage(((38/100) / 2))
+$b3: percentage(((38/100) / 3))
+$b4: percentage(((38/100) / 4))
+$b5: percentage(((38/100) / 5))
+$half_b1: percentage((50/100) - ((38/100) / 1 / 2))
+$half_b2: percentage((50/100) - ((38/100) / 2 / 2))
+$half_b3: percentage((50/100) - ((38/100) / 3 / 2))
+$half_b4: percentage((50/100) - ((38/100) / 4 / 2))
+$half_b5: percentage((50/100) - ((38/100) / 5 / 2))
 $p: 5px
+
+$font_color: rgba(255, 255, 255, 1);
+$font_color2: rgba(211, 211, 211, 1);
 $bg_color: rgba(0, 0, 0, 0.8);
+$bg_color2: rgba(88, 88, 88, 0.8);
 body
     background: url(/game_client/background.jpg)
     background-size: 100% 100%
+    canvas
+        position: fixed
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+h1,h2,h3,h4,h5
+    color: $font_color
 .modal
     display: block
     position: fixed
@@ -19,26 +51,68 @@ body
         padding: $p
         font-size: $p * 4
         float: right
-.modal-a-a
-    width: 62%
-    height: 62%
-    top: 19%
-    left: 19%
-.modal-a-b
-    width: 62%
-    height: 38%
-    top: 19%
-    left: 31%
-.modal-b-a
-    width: 38%
-    height: 62%
-    top: 31%
-    left: 19%
-.modal-b-b
-    width: 38%
-    height: 38%
-    top: 19%
-    left: 19%
+.width-a1
+    width: $a1
+    left: $half_a1
+.width-a2
+    width: $a2
+    left: $half_a2
+.width-a3
+    width: $a3
+    left: $half_a3
+.width-a4
+    width: $a4
+    left: $half_a4
+.width-a5
+    width: $a5
+    left: $half_a5
+.width-b1
+    width: $b1
+    left: $half_b1
+.width-b2
+    width: $b2
+    left: $half_b2
+.width-b3
+    width: $b3
+    left: $half_b3
+.width-b4
+    width: $b4
+    left: $half_b4
+.width-b5
+    width: $b5
+    left: $half_b5
+.height-a1
+    height: $a1
+    top: $half_a1
+.height-a2
+    height: $a2
+    top: $half_a2
+.height-a3
+    height: $a3
+    top: $half_a3
+.height-a4
+    height: $a4
+    top: $half_a4
+.height-a5
+    height: $a5
+    top: $half_a5
+.height-b1
+    height: $b1
+    top: $half_b1
+.height-b2
+    height: $b2
+    top: $half_b2
+.height-b3
+    height: $b3
+    top: $half_b3
+.height-b4
+    height: $b4
+    top: $half_b4
+.height-b5
+    height: $b5
+    top: $half_b5
+.margin-0
+    margin: 0!important;
 .top-right-buttons
     position: fixed
     height: ($p * 5)
@@ -46,4 +120,34 @@ body
     background-color: $bg_color;
     button
         float: left
-        
+#game_save_thumb_wrapper
+    float: left
+    overflow-x: scroll
+    width: 100%
+    white-space: nowrap
+.game_save_thumb
+    display: inline-block
+    margin-top: $p * 3
+    margin-left: $p * 3
+    margin-bottom: $p * 3
+    padding: $p
+    background-color: $bg_color2
+    button
+        width: 100%
+        margin-top: $a2
+/* width */
+::-webkit-scrollbar
+    width: 10px
+
+
+/* Track */
+::-webkit-scrollbar-track
+    background: transparent
+
+ 
+/* Handle */
+::-webkit-scrollbar-thumb
+    background: $bg_color2
+    border-radius: $p
+    cursor: pointer
+
