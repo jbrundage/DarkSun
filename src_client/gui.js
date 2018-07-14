@@ -76,10 +76,6 @@ function show_new_game_form(){
                     return game_save_thumb_html(saved_game.name,idx);
                 }) : ''
             }
-            <div class="game_save_thumb width-b1 height-a1">
-                <h4>New Game</h4>
-                <button class="btn btn-success" onclick="load_game(5)">Start</button>
-            </div>
         </div>
     </div>
             `);
@@ -87,7 +83,7 @@ function show_new_game_form(){
         return `
             <div class="game_save_thumb width-b1 height-a1">
                 <h4>${game_save_name}</h4>
-                <button class="btn btn-primary" onclick="load_game(${idx})">Start</button>
+                <button class="btn btn-${game_save_name === "New Game" ? "success" : "primary"}" onclick="load_game(${idx})">Start</button>
             </div>
         `
     }
