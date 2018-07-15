@@ -69,6 +69,7 @@ function send_form(elm){
             } catch (e) {
                 console.info(`function_name`,function_name);
                 console.info(`e`,e);
+                show_login_form();
             }
         },
         error: function(resp){

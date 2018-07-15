@@ -29,7 +29,9 @@ function init_game() {
 
     // We want to allow the loaded object to drift around, if the user wants to see that.  These variables will control that
     window.g_driftstate = 0;
-    window.g_driftx = driftz = driftrotx = driftroty = driftrotz = 0.0;
+    window.g_driftx = g_driftz = g_driftrotx = g_driftroty = g_driftrotz = 0.0;
+    g_driftz = 0.01;
+    g_driftx = 0.01;
 
     // Set up a cursor ball to show in the 3D world
     window.g_mousepoint = new THREE.Mesh(new THREE.SphereGeometry(0.25), new THREE.MeshBasicMaterial({
@@ -66,4 +68,19 @@ function loadshiptexture(texture_url) {
     g_model.material = new THREE.MeshBasicMaterial({
         map: g_texmgr.load(texture_url)
     });
+}
+
+animate();
+
+function animate() {
+    requestAnimationFrame(animate);
+    if(typeof g_model !== "undefined"){
+        g_model.rotateX(g_driftrotx);
+        g_model.rotateY(g_driftroty);
+        g_model.rotateZ(g_driftrotz);
+    }
+    
+    if(typeof g_renderer !== "undefined"){
+        g_renderer.render(g_scene, g_camera);
+    }
 }

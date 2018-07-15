@@ -50,11 +50,13 @@ app.post('/update_user',urlencodedparser,function(request, response){
 });
 app.post('/submit_login',urlencodedparser,function(request, response){
     auth_helper.get_user_session(request.body.username, request.body.password, function(user_session_doc){
-        user_session_doc.json = JSON.stringify({
-            saved_games_arr: [
-                game_helper.get_new_game_json()
-            ]
-        })
+        if(typeof user_session_doc.error === "undefined"){
+            user_session_doc.json = JSON.stringify({
+                saved_games_arr: [
+                    game_helper.get_new_game_json()
+                ]
+            })
+        }
         response.send(user_session_doc);
     });
 });
